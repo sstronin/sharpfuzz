@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{98697BA7-F222-49CC-A5D3-8547821A54C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFuzz", "src\SharpFuzz\SharpFuzz.csproj", "{65536044-92BB-4160-9312-8170BF16A242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpFuzz", "src\SharpFuzz\SharpFuzz.csproj", "{65536044-92BB-4160-9312-8170BF16A242}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFuzz.Common", "src\SharpFuzz.Common\SharpFuzz.Common.csproj", "{15898165-B069-4B1B-A215-D65B2E49C17D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpFuzz.Common", "src\SharpFuzz.Common\SharpFuzz.Common.csproj", "{15898165-B069-4B1B-A215-D65B2E49C17D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFuzz.CommandLine", "src\SharpFuzz.CommandLine\SharpFuzz.CommandLine.csproj", "{1885DD20-B3DF-4CC7-ABC7-46643511514F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpFuzz.CommandLine", "src\SharpFuzz.CommandLine\SharpFuzz.CommandLine.csproj", "{1885DD20-B3DF-4CC7-ABC7-46643511514F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFuzz.Sockets", "src\SharpFuzz.Sockets\SharpFuzz.Sockets.csproj", "{09268C52-C7E4-4150-9971-7C60488A30FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{65536044-92BB-4160-9312-8170BF16A242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -60,10 +59,29 @@ Global
 		{1885DD20-B3DF-4CC7-ABC7-46643511514F}.Release|x64.Build.0 = Release|Any CPU
 		{1885DD20-B3DF-4CC7-ABC7-46643511514F}.Release|x86.ActiveCfg = Release|Any CPU
 		{1885DD20-B3DF-4CC7-ABC7-46643511514F}.Release|x86.Build.0 = Release|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Debug|x86.Build.0 = Debug|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Release|x64.Build.0 = Release|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Release|x86.ActiveCfg = Release|Any CPU
+		{09268C52-C7E4-4150-9971-7C60488A30FE}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{65536044-92BB-4160-9312-8170BF16A242} = {98697BA7-F222-49CC-A5D3-8547821A54C8}
 		{15898165-B069-4B1B-A215-D65B2E49C17D} = {98697BA7-F222-49CC-A5D3-8547821A54C8}
 		{1885DD20-B3DF-4CC7-ABC7-46643511514F} = {98697BA7-F222-49CC-A5D3-8547821A54C8}
+		{09268C52-C7E4-4150-9971-7C60488A30FE} = {98697BA7-F222-49CC-A5D3-8547821A54C8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD976F65-94A2-414E-9EAB-466A443BA5AC}
 	EndGlobalSection
 EndGlobal

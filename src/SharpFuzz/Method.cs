@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
@@ -16,8 +17,8 @@ namespace SharpFuzz
 		private readonly MemberRef onBranch;
 		private readonly bool enableOnBranchCallback;
 
-		private readonly IMethod invoke;
-		private readonly CilBody body;
+        private readonly IMethod onBranchCall;
+        private readonly CilBody body;
 		private readonly List<Instruction> instructions;
 		private readonly Dictionary<Instruction, Instruction> instrumented;
 
@@ -35,25 +36,29 @@ namespace SharpFuzz
 
 			if (enableOnBranchCallback)
 			{
-				invoke = method.Module.Import(typeof(Action<int, string>).GetMethod(nameof(Action.Invoke)));
-			}
+                onBranchCall = method.Module.Import(typeof(Common.Trace)
+                    .GetMethod(nameof(Common.Trace.OnBranchCall)));
+            }
 
 			body = method.Body;
 			instructions = body.Instructions.ToList();
-			instrumented = new Dictionary<Instruction, Instruction>();
+            if(instructions.Any())
+            {
+                instrumented = new Dictionary<Instruction, Instruction>();
 
-			body.SimplifyBranches();
-			body.Instructions.Clear();
+                body.SimplifyBranches();
+                body.Instructions.Clear();
 
-			FindInstrumentationTargets();
-			Instrument(method.FullName);
-			UpdateBranchTargets();
-			UpdateExceptionHandlers();
+                FindInstrumentationTargets();
+                Instrument(method.FullName);
+                UpdateBranchTargets();
+                UpdateExceptionHandlers();
 
-			body.OptimizeBranches();
-		}
+                body.OptimizeBranches();
+            }
+        }
 
-		public static void Instrument(
+        public static void Instrument(
 			MemberRef sharedMem,
 			MemberRef prevLocation,
 			MemberRef onBranch,
@@ -70,6 +75,11 @@ namespace SharpFuzz
 		// 4) Catch blocks (implicit jump destinations)
 		private void FindInstrumentationTargets()
 		{
+            if(!instructions.Any())
+            {
+                throw new InstrumentationException($"Method has empty body");
+            }
+
 			instrumented.Add(instructions[0], null);
 
 			for (int i = 0; i < instructions.Count; ++i)
@@ -127,37 +137,39 @@ namespace SharpFuzz
 			}
 		}
 
-		// Generates the instrumentation instructions for a branch
-		// destination. It's equivalent to the following C# code:
-		// var id = IdGenerator.Next();
-		// SharpFuzz.Common.Trace.SharedMem[id ^ SharpFuzz.Common.Trace.PrevLocation]++;
-		// SharpFuzz.Common.Trace.PrevLocation = id >> 1;
 		private IEnumerable<Instruction> GenerateInstrumentationInstructions(string methodName)
 		{
 			int id = IdGenerator.Next();
 
-			yield return Instruction.Create(OpCodes.Ldsfld, sharedMem);
-			yield return Instruction.Create(OpCodes.Ldc_I4, id);
-			yield return Instruction.Create(OpCodes.Ldsfld, prevLocation);
-			yield return Instruction.Create(OpCodes.Xor);
-			yield return Instruction.Create(OpCodes.Add);
-			yield return Instruction.Create(OpCodes.Dup);
-			yield return Instruction.Create(OpCodes.Ldind_U1);
-			yield return Instruction.Create(OpCodes.Ldc_I4_1);
-			yield return Instruction.Create(OpCodes.Add);
-			yield return Instruction.Create(OpCodes.Conv_U1);
-			yield return Instruction.Create(OpCodes.Stind_I1);
-			yield return Instruction.Create(OpCodes.Ldc_I4, id >> 1);
-			yield return Instruction.Create(OpCodes.Stsfld, prevLocation);
-
 			if (enableOnBranchCallback)
 			{
-				yield return Instruction.Create(OpCodes.Ldsfld, onBranch);
 				yield return Instruction.Create(OpCodes.Ldc_I4, id);
 				yield return Instruction.Create(OpCodes.Ldstr, methodName);
-				yield return Instruction.Create(OpCodes.Callvirt, invoke);
-			}
-		}
+                yield return Instruction.Create(OpCodes.Call, onBranchCall);
+            }
+            else
+            {
+                // Generates the instrumentation instructions for a branch
+                // destination. It's equivalent to the following C# code:
+                // var id = IdGenerator.Next();
+                // SharpFuzz.Common.Trace.SharedMem[id ^ SharpFuzz.Common.Trace.PrevLocation]++;
+                // SharpFuzz.Common.Trace.PrevLocation = id >> 1;
+
+                yield return Instruction.Create(OpCodes.Ldsfld, sharedMem);
+                yield return Instruction.Create(OpCodes.Ldsfld, prevLocation);
+                yield return Instruction.Create(OpCodes.Ldc_I4, id);
+                yield return Instruction.Create(OpCodes.Xor);
+                yield return Instruction.Create(OpCodes.Add);
+                yield return Instruction.Create(OpCodes.Dup);
+                yield return Instruction.Create(OpCodes.Ldind_U1);
+                yield return Instruction.Create(OpCodes.Ldc_I4_1);
+                yield return Instruction.Create(OpCodes.Add);
+                yield return Instruction.Create(OpCodes.Conv_U1);
+                yield return Instruction.Create(OpCodes.Stind_I1);
+                yield return Instruction.Create(OpCodes.Ldc_I4, id >> 1);
+                yield return Instruction.Create(OpCodes.Stsfld, prevLocation);
+            }
+        }
 
 		// Change all branch destinations to point to the first instruction
 		// in the instrumentation code instead of the original branch target.

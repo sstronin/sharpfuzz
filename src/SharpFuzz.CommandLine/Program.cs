@@ -31,18 +31,37 @@ Examples:
 			}
 
 			string path = args[0];
+			string[] files;
 
-			if (!File.Exists(path))
-			{
-				Console.Error.WriteLine("Specified file does not exist.");
-				return 1;
+			if(path.Contains("*") || path.Contains("?"))
+            {
+				var directory = Path.GetDirectoryName(path);
+				if (String.IsNullOrEmpty(directory)) directory = @".\";
+				files = Directory.GetFiles(directory, Path.GetFileName(path));
+				if (files.Length == 0)
+				{
+					Console.Error.WriteLine("Files were not found.");
+					return 1;
+				}
 			}
+			else
+            {
+				if (!File.Exists(path))
+				{
+					Console.Error.WriteLine("Specified file does not exist.");
+					return 1;
+				}
 
-			var isCoreLib = Path.GetFileNameWithoutExtension(path) == "System.Private.CoreLib";
+				files = new string[] { path };
+			}
 			var include = new List<string>();
 			var exclude = new List<string>();
 
-			foreach (var arg in args.Skip(1))
+            bool enableOnBranchCallback = false;
+            bool printInstrumented = false;
+            int newVersion = -1;
+
+            foreach (var arg in args.Skip(1))
 			{
 				// This feature is necessary for me, but it's not documented on purpose,
 				// because I don't want to complicate things further for the users.
@@ -50,12 +69,34 @@ Examples:
 				{
 					exclude.AddRange(arg.Substring(1).Trim().Split(',', StringSplitOptions.RemoveEmptyEntries));
 				}
-				else
+				else if(arg.StartsWith("+"))
 				{
-					include.AddRange(arg.Split(',', StringSplitOptions.RemoveEmptyEntries));
+					include.AddRange(arg.Substring(1).Split(',', StringSplitOptions.RemoveEmptyEntries));
 				}
+				else if (arg.StartsWith("/exclude:", StringComparison.InvariantCultureIgnoreCase))
+				{
+					exclude.AddRange(File.ReadAllLines(arg.Substring(9)));
+				}
+				else if (arg.StartsWith("/include:", StringComparison.InvariantCultureIgnoreCase))
+				{
+					include.AddRange(File.ReadAllLines(arg.Substring(9)));
+				}
+				else if (arg.StartsWith("/usecallback",StringComparison.InvariantCultureIgnoreCase))
+                {
+                    enableOnBranchCallback = true;
+                }
+                else if(arg.StartsWith("/setversion:", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    newVersion = Int32.Parse(arg.Substring(12));
+                }
+                else if(arg.StartsWith("/print", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    printInstrumented = true;
+                }
 			}
 
+
+			var isCoreLib = files.Any(i=> Path.GetFileNameWithoutExtension(i) == "System.Private.CoreLib");
 			if (isCoreLib && include.Count == 0)
 			{
 				Console.Error.WriteLine("At least one prefix is required when instrumenting System.Private.CoreLib.");
@@ -64,14 +105,25 @@ Examples:
 
 			try
 			{
-				var enableOnBranchCallback = Environment.GetEnvironmentVariable("SHARPFUZZ_ENABLE_ON_BRANCH_CALLBACK") is object;
-				var types = Fuzzer.Instrument(path, Matcher, enableOnBranchCallback);
+                if (Environment.GetEnvironmentVariable("SHARPFUZZ_ENABLE_ON_BRANCH_CALLBACK") is object)
+                {
+                    enableOnBranchCallback = true;
+                }
 
-				if (Environment.GetEnvironmentVariable("SHARPFUZZ_PRINT_INSTRUMENTED_TYPES") is object)
+				foreach (var file in files)
 				{
-					foreach (var type in types)
+					var types = Fuzzer.Instrument(file, Matcher, enableOnBranchCallback, newVersion);
+
+					if (printInstrumented ||
+						Environment.GetEnvironmentVariable("SHARPFUZZ_PRINT_INSTRUMENTED_TYPES") is object)
 					{
-						Console.WriteLine(type);
+						Console.WriteLine(file + ":");
+						Console.WriteLine();
+						foreach (var type in types)
+						{
+							Console.WriteLine(type);
+						}
+						Console.WriteLine();
 					}
 				}
 			}
@@ -80,10 +132,11 @@ Examples:
 				Console.Error.WriteLine(ex.Message);
 				return 1;
 			}
-			catch
+			catch(Exception e)
 			{
 				Console.Error.WriteLine("Failed to instrument the specified file, most likely because it's not a valid .NET assembly.");
-				return 1;
+                Console.Error.WriteLine(e);
+                return 1;
 			}
 
 			bool Matcher(string type)

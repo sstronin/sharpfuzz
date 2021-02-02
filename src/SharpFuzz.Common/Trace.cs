@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace SharpFuzz.Common
 {
@@ -26,5 +27,26 @@ namespace SharpFuzz.Common
 		/// called if the user chose to use it when instrumenting the assembly.
 		/// </summary>
 		public static Action<int, string> OnBranch;
-	}
+
+        // default buffers to prevent crashing before test environment could be set
+        static Trace()
+        {
+            var intPtr = Marshal.AllocHGlobal(0x10000);
+            SharedMem = (byte*)intPtr.ToPointer();
+            PrevLocation = 0;
+        }
+
+        public static void OnBranchCall(int branchId, string branchName)
+        {
+            if(SharedMem!=null)
+            {
+                SharedMem[branchId ^ PrevLocation]++;
+                PrevLocation = branchId / 2;
+            }
+            if (OnBranch != null)
+            {
+                OnBranch.Invoke(branchId, branchName);
+            }
+        }
+    }
 }

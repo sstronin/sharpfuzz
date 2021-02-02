@@ -32,11 +32,15 @@ namespace SharpFuzz
 		/// True if <see cref="SharpFuzz.Common.Trace.OnBranch"/> callback
 		/// should be called each time a branch is hit, false otherwise.
 		/// </param>
+		/// <param name="newVersion">
+		/// If not zero, to be set as instrumented assembly major version
+		/// </param>
 		/// <returns>An ordered collection of instrumented types.</returns>
 		public static IEnumerable<string> Instrument(
 			string source,
 			Func<string, bool> matcher,
-			bool enableOnBranchCallback)
+			bool enableOnBranchCallback,
+            int newVersion)
 		{
 			ThrowIfNull(source, nameof(source));
 			ThrowIfNull(matcher, nameof(matcher));
@@ -73,13 +77,17 @@ namespace SharpFuzz
 					}
 					else
 					{
-						using (var commonMod = ModuleDefMD.Load(common.Location))
+                        if (newVersion > 0)
+                        {
+                            src.Assembly.Version = new Version(newVersion, 0, 0, 0);
+                        }
+                        using (var commonMod = ModuleDefMD.Load(common.Location))
 						{
-							var traceType = commonMod.Types.Single(t => t.FullName == typeof(Common.Trace).FullName);
+                            var traceType = commonMod.Types.Single(t => t.FullName == typeof(Common.Trace).FullName);
 							types = Instrument(src, dst, matcher, enableOnBranchCallback, traceType);
-						}
-					}
-				}
+                        }
+                    }
+                }
 
 				dst.Position = 0;
 
