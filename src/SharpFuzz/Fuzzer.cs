@@ -125,7 +125,7 @@ namespace SharpFuzz
 
 					foreach (var method in type.Methods)
 					{
-						if (method.HasBody)
+						if (method.HasBody && matcher($"{type.FullName}::{method.Name}"))
 						{
 							Method.Instrument(sharedMemRef, prevLocationRef, onBranchRef, enableOnBranchCallback, method);
 
