@@ -61,12 +61,30 @@ namespace SharpFuzz.Sockets
                 if (_shmid < 0 )
                 {
                     Logger.Write("No afl-fuzz detected, dry run");
+
+                    var socket = new ControlSocket.Client();
+                    socket.Connect(_hostName, _controlPort);
+
+                    var pid = socket.StartTest(_collectLocations);
+                    if (pid == null)
+                    {
+                        Logger.Write("Failed to communicate with agent");
+                        return;
+                    }
+
                     using (var memory = new UnclosableStreamWrapper(new MemoryStream()))
                     {
                         stream.CopyTo(memory);
                         memory.Seek(0, SeekOrigin.Begin);
                         action(memory);
                     }
+
+                    socket.GetStatus(out var c, out var l);
+                    if (!iterationCallback(1, l))
+                    {
+                        Logger.Write($"Test results were not accepted");
+                    }
+
                     return;
                 }
 
