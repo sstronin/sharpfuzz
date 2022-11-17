@@ -75,11 +75,15 @@ Examples:
 				}
 				else if (arg.StartsWith("/exclude:", StringComparison.InvariantCultureIgnoreCase))
 				{
-					exclude.AddRange(File.ReadAllLines(arg.Substring(9)));
+					exclude.AddRange(File.ReadAllLines(arg.Substring(9))
+						.Select(i => i.Substring(0, i.IndexOf(':') > 0 ? i.IndexOf(" :") : i.Length).Trim())
+						.Where(i => !String.IsNullOrWhiteSpace(i)));
 				}
 				else if (arg.StartsWith("/include:", StringComparison.InvariantCultureIgnoreCase))
 				{
-					include.AddRange(File.ReadAllLines(arg.Substring(9)));
+					include.AddRange(File.ReadAllLines(arg.Substring(9))
+						.Select(i => i.Substring(0, i.IndexOf(':') > 0 ? i.IndexOf(" :") : i.Length).Trim())
+						.Where(i => !String.IsNullOrWhiteSpace(i)));
 				}
 				else if (arg.StartsWith("/usecallback",StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -94,7 +98,6 @@ Examples:
                     printInstrumented = true;
                 }
 			}
-
 
 			var isCoreLib = files.Any(i=> Path.GetFileNameWithoutExtension(i) == "System.Private.CoreLib");
 			if (isCoreLib && include.Count == 0)
@@ -141,8 +144,11 @@ Examples:
 
 			bool Matcher(string type)
 			{
-				if (exclude.Any(prefix => type.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)))
+				var trimmed = type.Substring(type.IndexOf(' ') + 1);
+
+				if (exclude.Any(prefix => trimmed.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
 				{
+					Console.Error.WriteLine($"Excluded: {trimmed}");
 					return false;
 				}
 
@@ -151,7 +157,7 @@ Examples:
 					return true;
 				}
 
-				if (include.Any(prefix => type.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)))
+				if (include.Any(prefix => trimmed.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
 				{
 					return true;
 				}

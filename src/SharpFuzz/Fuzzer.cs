@@ -121,19 +121,13 @@ namespace SharpFuzz
 			{
 				if (type.HasMethods && matcher(type.FullName))
 				{
-					bool instrumented = false;
-
 					foreach (var method in type.Methods)
 					{
-						if (method.HasBody && matcher($"{type.FullName}::{method.Name}"))
+						if (method.HasBody && matcher(method.FullName))
 						{
 							Method.Instrument(sharedMemRef, prevLocationRef, onBranchRef, enableOnBranchCallback, method);
 
-							if (!instrumented)
-							{
-								types.Add(type.FullName);
-								instrumented = true;
-							}
+							types.Add(method.FullName);
 						}
 					}
 				}
