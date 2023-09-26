@@ -6,8 +6,8 @@
 
 [nuget-shield]: https://img.shields.io/nuget/v/SharpFuzz.svg
 [nuget-link]: https://www.nuget.org/packages/SharpFuzz
-[build-shield]: https://ci.appveyor.com/api/projects/status/tpufk0k8h4falflf?svg=true
-[build-link]: https://ci.appveyor.com/project/Metalnem/sharpfuzz
+[build-shield]: https://github.com/metalnem/sharpfuzz/actions/workflows/dotnet.yml/badge.svg
+[build-link]: https://github.com/Metalnem/sharpfuzz/actions/workflows/dotnet.yml
 [license-shield]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
 [license-link]: https://github.com/metalnem/sharpfuzz/blob/master/LICENSE
 
@@ -23,6 +23,7 @@ integration with afl-fuzz works, read my blog post
 ## Table of contents
 
 - [CVE](#cve)
+- [Articles](#articles)
 - [Trophies](#trophies)
 - [Requirements](#requirements)
 - [Installation](#installation)
@@ -34,6 +35,13 @@ integration with afl-fuzz works, read my blog post
 
 - [CVE-2019-0980: .NET Framework and .NET Core Denial of Service Vulnerability](https://portal.msrc.microsoft.com/en-us/security-guidance/advisory/CVE-2019-0980)
 - [CVE-2019-0981: .NET Framework and .NET Core Denial of Service Vulnerability](https://portal.msrc.microsoft.com/en-us/security-guidance/advisory/CVE-2019-0981)
+
+## Articles
+
+- [SharpFuzz: Bringing the power of afl-fuzz to .NET platform](https://mijailovic.net/2019/01/03/sharpfuzz/)
+- [Five years of fuzzing .NET with SharpFuzz](https://mijailovic.net/2023/07/23/sharpfuzz-anniversary/)
+- [Let’s do DHCP: fuzzing](http://writeasync.net/?p=5714)
+- [Fuzzing C# on Windows with SharpFuzz and libfuzzer-dotnet](https://github.com/ranweiler/libfuzzer-dotnet-windows-example/blob/main/README.md)
 
 ## Trophies
 
@@ -49,15 +57,15 @@ request for the README file, or file an issue.
 - [CoreFX: DataContractJsonSerializer.ReadObject throws IndexOutOfRangeException](https://github.com/dotnet/runtime/issues/1410)
 - [CoreFX: DataContractSerializer.ReadObject throws ArgumentNullException](https://github.com/dotnet/runtime/issues/1409)
 - [CoreFX: Double.Parse throws AccessViolationException on .NET Core 3.0](https://github.com/dotnet/corefx/issues/35780) **fixed**
-- [CoreFX: G17 format specifier doesn't always round-trip double values](https://github.com/dotnet/corefx/issues/35369)
+- [CoreFX: G17 format specifier doesn't always round-trip double values](https://github.com/dotnet/corefx/issues/35369) **fixed**
 - [CoreFX: Uri.TryCreate throws IndexOutOfRangeException](https://github.com/dotnet/corefx/issues/35072)
 - [CoreFX: XmlReader.Create throws IndexOutOfRangeException](https://github.com/dotnet/corefx/issues/35073) **fixed**
 - [DotLiquid: Template.Parse throws ArgumentNullException instead of SyntaxException](https://github.com/dotliquid/dotliquid/issues/333)
-- [Esprima .NET: JavaScriptParser.ParseProgram throws ArgumentOutOfRangeException](https://github.com/sebastienros/esprima-dotnet/issues/70)
+- [Esprima .NET: JavaScriptParser.ParseProgram throws ArgumentOutOfRangeException](https://github.com/sebastienros/esprima-dotnet/issues/70) **fixed**
 - [Esprima .NET: StackOverflowException when parsing a lot of starting parentheses](https://github.com/sebastienros/esprima-dotnet/issues/104) **fixed**
 - [ExcelDataReader: ExcelReaderFactory.CreateBinaryReader can throw unexpected exceptions](https://github.com/ExcelDataReader/ExcelDataReader/issues/383) **fixed**
 - [ExcelDataReader: ExcelReaderFactory.CreateBinaryReader throws OutOfMemoryException](https://github.com/ExcelDataReader/ExcelDataReader/issues/382) **fixed**
-- [ExCSS: StylesheetParser.Parse throws ArgumentOutOfRangeException](https://github.com/TylerBrinks/ExCSS/issues/101)
+- [ExCSS: StylesheetParser.Parse throws ArgumentOutOfRangeException](https://github.com/TylerBrinks/ExCSS/issues/101) **fixed**
 - [Fluid: FluidTemplate.TryParse and FluidTemplateExtensions.Render throw some unexpected exceptions](https://github.com/sebastienros/fluid/issues/148) **fixed**
 - [Fluid: FluidTemplateExtensions.Render hangs permanently](https://github.com/sebastienros/fluid/issues/149) **fixed**
 - [Google.Protobuf: MessageParser.ParseFrom throws unexpected exceptions (C#)](https://github.com/protocolbuffers/protobuf/issues/5513) **fixed**
@@ -79,14 +87,17 @@ request for the README file, or file an issue.
 - [Markdig: Markdown.ToHtml takes more than two minutes to complete when processing the 32K file](https://github.com/lunet-io/markdig/issues/306) **fixed**
 - [Markdig: Markdown.ToHtml throws ArgumentOutOfRangeException](https://github.com/lunet-io/markdig/issues/275) **fixed**
 - [Markdig: Markdown.ToHtml throws IndexOutOfRangeException](https://github.com/lunet-io/markdig/issues/276) **fixed**
-- [Markdig: Markdown.ToHtml throws IndexOutOfRangeException](https://github.com/lunet-io/markdig/issues/303)
+- [Markdig: Markdown.ToHtml throws IndexOutOfRangeException](https://github.com/lunet-io/markdig/issues/303) **fixed**
 - [Markdig: Markdown.ToHtml throws NullReferenceException](https://github.com/lunet-io/markdig/issues/277) **fixed**
+- [Markdig: StackOverflowException is throw when converting special markdown to HTML](https://github.com/xoofx/markdig/issues/497) **fixed**
 - [MarkdownSharp: Markdown.Transform hangs permanently](https://github.com/StackExchange/MarkdownSharp/issues/8)
 - [MessagePack for C#: MessagePackSerializer.Deserialize<dynamic> hangs permanently](https://github.com/neuecc/MessagePack-CSharp/issues/359) **fixed**
 - [MessagePack for CLI: Unpacking.UnpackObject throws several unexpected exceptions](https://github.com/msgpack/msgpack-cli/issues/311)
 - [Mono.Cecil: ModuleDefinition.ReadModule can throw many (possibly) unexpected exceptions](https://github.com/jbevain/cecil/issues/556)
 - [Mono.Cecil: ModuleDefinition.ReadModule hangs permanently](https://github.com/jbevain/cecil/issues/555) **fixed**
 - [NCrontab: CrontabSchedule.Parse throws OverflowException instead of CrontabException](https://github.com/atifaziz/NCrontab/issues/43)
+- [nHapi: Bad inputs cause unexpected exceptions and permanent hang](https://github.com/nHapiNET/nHapi/issues/196) **fixed**
+- [nHapi: Bad inputs cause StackOverflow/Access Violation](https://github.com/nHapiNET/nHapi/issues/198) **fixed**
 - [NUglify: Uglify.Js hangs permanently](https://github.com/xoofx/NUglify/issues/63) **fixed**
 - [Open XML SDK: Add some security/fuzz testing](https://github.com/OfficeDev/Open-XML-SDK/issues/441)
 - [OpenMCDF: OutOfMemoryException when parsing Excel document / endless while-loop](https://github.com/ironfede/openmcdf/issues/30) **fixed**
@@ -95,7 +106,7 @@ request for the README file, or file an issue.
 - [OpenMCDF: System.OutOfMemoryException when reading corrupt Word document](https://github.com/ironfede/openmcdf/issues/40) **fixed**
 - [PdfPig: StackOverflowException reading corrupt PDF document](https://github.com/UglyToad/PdfPig/issues/33) **fixed**
 - [protobuf-net: Serializer.Deserialize can throw many unexpected exceptions](https://github.com/mgravell/protobuf-net/issues/481)
-- [protobuf-net: Serializer.Deserialize hangs permanently](https://github.com/mgravell/protobuf-net/issues/479)
+- [protobuf-net: Serializer.Deserialize hangs permanently](https://github.com/mgravell/protobuf-net/issues/479) **fixed**
 - [Scriban: Template.ParseLiquid throws ArgumentOutOfRangeException](https://github.com/lunet-io/scriban/issues/121) **fixed**
 - [Scriban: Template.ParseLiquid throws NullReferenceException](https://github.com/lunet-io/scriban/issues/120) **fixed**
 - [Scriban: Template.Render throws InvalidCastException](https://github.com/lunet-io/scriban/issues/122) **fixed**
@@ -122,9 +133,10 @@ request for the README file, or file an issue.
 
 ## Requirements
 
-AFL works on Linux and macOS. If you are using
-Windows, you can use any Linux distribution
-that works under the [Windows Subsystem for Linux].
+AFL works on Linux and macOS. If you are using Windows, you can use any Linux distribution
+that works under the [Windows Subsystem for Linux]. For native Windows support, you can use
+[libFuzzer](https://github.com/Metalnem/sharpfuzz/blob/master/docs/libFuzzer.md)
+instead of AFL.
 
 You will need GNU make and a working compiler
 (gcc or clang) in order to compile afl-fuzz.
@@ -132,8 +144,12 @@ You will also need to have the [.NET Core 2.1]
 or greater installed on your machine in order
 to instrument .NET assemblies with SharpFuzz.
 
+To simplify your fuzzing experience, it's also
+recommended to install [PowerShell].
+
 [Windows Subsystem for Linux]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
 [.NET Core 2.1]: https://dotnet.microsoft.com/download
+[PowerShell]: https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell
 
 ## Installation
 
@@ -151,15 +167,8 @@ tar -xvf afl-latest.tgz
 rm afl-latest.tgz
 cd afl-2.52b/
 
-# Patch afl-fuzz so that it doesn't check whether the binary
-# being fuzzed is instrumented (we have to do this because
-# we are going to run our programs with the dotnet run command,
-# and the dotnet binary would fail this check)
-wget https://github.com/Metalnem/sharpfuzz/raw/master/patches/RemoveInstrumentationCheck.diff
-patch < RemoveInstrumentationCheck.diff
-
 # Install afl-fuzz
-make install
+sudo make install
 cd ..
 rm -rf afl-2.52b/
 
@@ -167,12 +176,8 @@ rm -rf afl-2.52b/
 dotnet tool install --global SharpFuzz.CommandLine
 ```
 
-The alternative to patching afl-fuzz in order to skip the
-instrumentation check is to set the **AFL_SKIP_BIN_CHECK**
-environment variable.
-
 [SharpFuzz.CommandLine]: https://www.nuget.org/packages/SharpFuzz.CommandLine/
-[script]: https://github.com/Metalnem/sharpfuzz/raw/master/build/Install.sh
+[script]: https://github.com/Metalnem/sharpfuzz/raw/master/scripts/install.sh
 
 ## Usage
 
@@ -188,74 +193,21 @@ and [Technical whitepaper for afl-fuzz].
 [Understanding the status screen]: http://lcamtuf.coredump.cx/afl/status_screen.txt
 [Technical whitepaper for afl-fuzz]: http://lcamtuf.coredump.cx/afl/technical_details.txt
 
-As an example, we are going to instrument [Jil],
+As an example, we are going to fuzz [Jil],
 which is a fast JSON serializer and deserializer
 (see [SharpFuzz.Samples] for many more examples
 of complete fuzzing projects).
 
-[Jil]: https://www.nuget.org/packages/Jil/
-[SharpFuzz.Samples]: https://github.com/Metalnem/sharpfuzz-samples
-
-**1.** Download the package from the NuGet gallery.
-You can do that by clicking the [download package]
-link in the info section of the page. The downloaded
-file will be called ```jil.2.16.0.nupkg```.
-
-**2.** Change the extension of the downloaded file
-from **nupkg** to **zip**, and then extract it.
-The location of the assembly we are going to instrument
-will be ```jil.2.16.0/lib/netstandard2.0/Jil.dll```.
-We could have chosen some other .NET platform, such
-as **net45** or **netstandard1.6**, but the latest
-version of .NET Standard is usually the best choice.
-
-**3.** Instrument the assembly by running the
-```sharpfuzz``` tool with the path to the assembly
-as a parameter. In our case, the exact command looks
-like this:
+**1.** Create a new .NET console project, then add [Jil] and
+[SharpFuzz] packages to it by running the following commands:
 
 ```shell
-sharpfuzz jil.2.16.0/lib/netstandard2.0/Jil.dll
-```
-
-The instrumentation is performed in place, which
-means that ```jil.2.16.0/lib/netstandard2.0/Jil.dll```
-will contain the instrumented version of Jil after
-running this command.
-
-**4.** Create a new .NET console project, and add
-the instrumented library to it, along with all of
-its dependencies. To do that, copy ```Jil.dll```
-to the root directory of the project, and then add
-the following element to your project file:
-
-```xml
-<ItemGroup>
-  <Reference Include="Jil">
-    <HintPath>Jil.dll</HintPath>
-  </Reference>
-</ItemGroup>
-```
-
-Jil depends on [Sigil], which is why you also have to
-manually add the reference to Sigil. You can install it
-from NuGet with the following command:
-
-```shell
-dotnet add package Sigil --version 4.7.0
-```
-
-**5.** Add the [SharpFuzz] package to the project by running
-the following command:
-
-```shell
+dotnet add package Jil
 dotnet add package SharpFuzz
 ```
 
-**6.** Now it's time to write some code. The **Main**
-function should call the **SharpFuzz.Fuzzer.Run**
-with the function that we want to test as a parameter.
-Here's the one possible way we could write this:
+**2.** In your **Main** function, call **SharpFuzz.Fuzzer.OutOfProcess.Run**
+with the function that you want to test as a parameter:
 
 ```csharp
 using System;
@@ -268,7 +220,7 @@ namespace Jil.Fuzz
   {
     public static void Main(string[] args)
     {
-      Fuzzer.Run(stream =>
+      Fuzzer.OutOfProcess.Run(stream =>
       {
         try
         {
@@ -286,19 +238,19 @@ namespace Jil.Fuzz
 
 We want to fuzz the deserialization capabilities of Jil,
 which is why we are calling the **JSON.DeserializeDynamic**
-method. The input data will be be provided to us via the
+method. The input data will be provided to us via the
 **stream** parameter (if the code you are testing takes
 its input as a string, you can use an additional overload
-of **Fuzzer.Run** that accepts **Action&lt;string&gt;**).
+of **Fuzzer.OutOfProcess.Run** that accepts **Action&lt;string&gt;**).
 
-If the code passed to **Fuzzer.Run** throws an exception,
+If the code passed to **Fuzzer.OutOfProcess.Run** throws an exception,
 it will be reported to afl-fuzz as a crash. However, we
 want to treat only *unexpected* exceptions as bugs.
 **DeserializationException** is what we expect when
 we encounter an invalid JSON input, which is why we
 catch it in our example.
 
-**7.** Create a directory with some test cases (one
+**3.** Create a directory with some test cases (one
 test is usually more than enough). Test files
 should contain some input that is accepted by
 your code as valid, and should also be as small as
@@ -309,30 +261,13 @@ for testing JSON deserializers:
 {"menu":{"id":1,"val":"X","pop":{"a":[{"click":"Open()"},{"click":"Close()"}]}}}
 ```
 
-**8.** You are now ready to go! Build the project
-with ```dotnet build```, and start the fuzzing with
-the following command:
+**4.** Let's say that your project is called ```Fuzzing.csproj```
+and that your test cases are in the ```Testcases``` directory.
+Start fuzzing by running the [fuzz.ps1] script like this:
 
 ```shell
-afl-fuzz -i testcases_dir -o findings_dir -t timeout \
-  dotnet path_to_assembly
+pwsh scripts/fuzz.ps1 Jil.Fuzz.csproj -i Testcases
 ```
-
-Let's say that our working directory is called ```Fuzzing```.
-If it contains the project ```Fuzzing.csproj```, and the
-directory called ```Testcases```, the full command might
-look like this:
-
-```shell
-afl-fuzz -i Testcases -o Findings -t 5000 \
-  dotnet bin/Debug/netcoreapp2.1/Fuzzing.dll
-```
-
-It's highly recommended that you always specify the timeout
-(5000ms from the previous example is a good choice), otherwise
-you will often get false crash reports because AFL uses automatic
-timeout calculation, which is too sensitive and unsuitable for
-managed languages.
 
 For formats such as HTML, JavaScript, JSON, or SQL,
 the fuzzing process can be greatly improved with
@@ -342,39 +277,18 @@ installation in ```/usr/local/share/afl/dictionaries/```.
 With this in mind, we can improve our fuzzing of Jil like this:
 
 ```shell
-afl-fuzz -i Testcases -o Findings -t 5000 \
-  -x /usr/local/share/afl/dictionaries/json.dict \
-  dotnet bin/Debug/netcoreapp2.1/Fuzzing.dll
+pwsh scripts/fuzz.ps1 Jil.Fuzz.csproj -i Testcases \
+  -x /usr/local/share/afl/dictionaries/json.dict
 ```
 
-Sometimes you may encounter the following error when
-running afl-fuzz:
-
-```
-[-] Oops, the program crashed with one of the test cases provided. There are
-    several possible explanations:
-```
-
-This usually happens when some of your provided test
-inputs cause the fuzzing function to throw an exception,
-but sometimes this can happen due to low default memory
-limit (I see this very often in the cloud environment).
-You can fix it by increasing the memory limit for your
-program to some large value:
-
-```shell
-afl-fuzz -i testcases_dir -o findings_dir -t 5000 -m 10000 \
-  dotnet path_to_assembly
-```
-
-**9.** Sit back and relax! You will often have
+**5.** Sit back and relax! You will often have
 some useful results within minutes, but sometimes
 it can take more than a day, so be patient.
 
-The input files responsible for unhandled exceptions
-will appear in ```findings_dir/crashes```. The total
-number of unique crashes will be displayed in red on
-the afl-fuzz status screen.
+The input files responsible for unhandled exceptions will
+appear in the ```findings/crashes``` directory. The total
+number of unique crashes will be displayed in red on the
+afl-fuzz status screen.
 
 In practice, the real number of unique exceptions will often
 be much lower than the reported number, which is why it's
@@ -382,10 +296,11 @@ usually best to write a small program that just goes through
 the crashing inputs, runs the fuzzing function on each of
 them, and saves only the inputs that produce unique stack traces.
 
-[download package]: https://www.nuget.org/api/v2/package/Jil/2.16.0
-[Sigil]: https://www.nuget.org/packages/Sigil/
+[Jil]: https://www.nuget.org/packages/Jil
+[SharpFuzz.Samples]: https://github.com/Metalnem/sharpfuzz-samples
 [SharpFuzz]: https://www.nuget.org/packages/SharpFuzz
 [dictionary]: https://lcamtuf.blogspot.com/2015/01/afl-fuzz-making-up-grammar-with.html
+[fuzz.ps1]: https://github.com/Metalnem/sharpfuzz/raw/master/scripts/fuzz.ps1
 
 ## Advanced topics
 
@@ -393,9 +308,11 @@ them, and saves only the inputs that produce unique stack traces.
 - [Out-of-process fuzzing](https://github.com/Metalnem/sharpfuzz/blob/master/docs/miscellaneous.md#out-of-process-fuzzing)
 - [Test case minimization](https://github.com/Metalnem/sharpfuzz/blob/master/docs/miscellaneous.md#test-case-minimization)
 - [Using libFuzzer with SharpFuzz](https://github.com/Metalnem/sharpfuzz/blob/master/docs/libFuzzer.md)
+- [Legacy usage instructions](https://github.com/Metalnem/sharpfuzz/blob/master/docs/legacy-usage-instructions.md)
 
 ## Acknowledgements
 
+- **Joe Ranweiler** and the MORSE team - [libFuzzer support on Windows](https://github.com/Metalnem/sharpfuzz/pull/24)
 - **Michal Zalewski** - [american fuzzy lop](http://lcamtuf.coredump.cx/afl/)
 - **Dmitry Vyukov** - [go-fuzz: randomized testing for Go](https://github.com/dvyukov/go-fuzz)
 - **Rody Kersten** - [Kelinci: AFL-based fuzzing for Java](https://github.com/isstac/kelinci)

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\build\Common.props" />
 
@@ -9,8 +9,8 @@
     <ToolCommandName>sharpfuzz</ToolCommandName>
     <PackageId>SharpFuzz.CommandLine</PackageId>
     <Title>SharpFuzz.CommandLine</Title>
-    <PackageVersion>1.6.3</PackageVersion>
-    <AssemblyVersion>1.6.3.0</AssemblyVersion>
+    <PackageVersion>2.1.1</PackageVersion>
+    <AssemblyVersion>2.1.1.0</AssemblyVersion>
     <Description>Command line tool for SharpFuzz instrumentation</Description>
   </PropertyGroup>
 
