@@ -18,7 +18,7 @@ namespace SharpFuzz.Common
 		/// <summary>
 		/// Identifier of the last executed branch.
 		/// </summary>
-		public static int PrevLocation;
+		public volatile static int PrevLocation;
 
 		/// <summary>
 		/// Callback that will be called with the unique branch identifier

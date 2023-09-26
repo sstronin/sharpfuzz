@@ -53,7 +53,7 @@ namespace SharpFuzz
 				{
 					if (!src.IsILOnly)
 					{
-						throw new InstrumentationException("Cannot instrument mixed-mode assemblies.");
+				//		throw new InstrumentationException("Cannot instrument mixed-mode assemblies.");
 					}
 
 					if (src.TypeExistsNormal(typeof(Common.Trace).FullName))
@@ -123,7 +123,9 @@ namespace SharpFuzz
 				{
 					foreach (var method in type.Methods)
 					{
-						if (method.HasBody && matcher(method.FullName))
+						if (method.HasBody &&
+							(method.CodeType&MethodImplAttributes.CodeTypeMask)==MethodImplAttributes.IL 
+							&& matcher(method.FullName))
 						{
 							Method.Instrument(sharedMemRef, prevLocationRef, onBranchRef, enableOnBranchCallback, method);
 
