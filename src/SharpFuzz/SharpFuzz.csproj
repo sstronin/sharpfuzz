@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <PackageReference Include="dnlib" Version="4.1.0" />
+    <PackageReference Include="dnlib" Version="4.2.0" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
 

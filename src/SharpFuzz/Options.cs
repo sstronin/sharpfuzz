@@ -27,18 +27,23 @@ namespace SharpFuzz
         ///     do whatever you want here
         /// };
         /// </summary>
-        public bool EnableOnBranchCallback { get; }
+        public bool EnableOnBranchCallback { get; set; }
 
         /// <summary>
         /// Print the list of all instrumented types to standard console output.
         /// </summary>
-        public bool PrintInstrumentedTypes { get; }
+        public bool PrintInstrumentedTypes { get; set; }
 
         /// <summary>
         /// Enable instrumenting mixed-mode assemblies (supported only on Windows).
         /// Used to instrument .NET Core system libraries.
         /// </summary>
-        public bool InstrumentMixedModeAssemblies { get; }
+        public bool InstrumentMixedModeAssemblies { get; set; }
+
+        /// <summary>
+        /// If not zero, defines major version of assembly
+        /// </summary>
+        public int NewVersion { get; set; }   
 
         private static bool GetValue(string flag)
         {

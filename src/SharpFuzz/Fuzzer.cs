@@ -50,7 +50,7 @@ namespace SharpFuzz
                     if (!src.IsILOnly)
                     {
                         if (options.InstrumentMixedModeAssemblies
-                            && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                            /* && RuntimeInformation.IsOSPlatform(OSPlatform.Windows)*/)
                         {
                             // https://github.com/0xd4d/dnlib/issues/305
                             // https://github.com/0xd4d/dnlib/issues/499
@@ -83,29 +83,15 @@ namespace SharpFuzz
                     }
                     else
                     {
+                        if (options.NewVersion > 0)
+                        {
+                            src.Assembly.Version = new Version(options.NewVersion, 0, 0, 0);
+                        }
+
                         using (var commonMod = ModuleDefMD.Load(common.Location))
                         {
                             var traceType = commonMod.Types.Single(t => t.FullName == typeof(Common.Trace).FullName);
                             types = Instrument(src, dst, matcher, options.EnableOnBranchCallback, traceType);
-                        }
-                    }
-                }
-					if (Path.GetFileNameWithoutExtension(source) == "System.Private.CoreLib")
-					{
-						var traceType = GenerateTraceType(src);
-						src.Types.Add(traceType);
-						types = Instrument(src, dst, matcher, enableOnBranchCallback, traceType);
-					}
-					else
-					{
-                        if (newVersion > 0)
-                        {
-                            src.Assembly.Version = new Version(newVersion, 0, 0, 0);
-                        }
-                        using (var commonMod = ModuleDefMD.Load(common.Location))
-						{
-                            var traceType = commonMod.Types.Single(t => t.FullName == typeof(Common.Trace).FullName);
-							types = Instrument(src, dst, matcher, enableOnBranchCallback, traceType);
                         }
                     }
                 }

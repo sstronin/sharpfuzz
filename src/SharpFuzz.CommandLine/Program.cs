@@ -57,9 +57,10 @@ Examples:
 			var include = new List<string>();
 			var exclude = new List<string>();
 
-            bool enableOnBranchCallback = false;
-            bool printInstrumented = false;
-            int newVersion = -1;
+			if(Environment.GetEnvironmentVariable("SHARPFUZZ_INSTRUMENT_MIXED_MODE_ASSEMBLIES") is null)
+			{
+                Options.Value.InstrumentMixedModeAssemblies = true;
+            }
 
             foreach (var arg in args.Skip(1))
 			{
@@ -87,15 +88,15 @@ Examples:
 				}
 				else if (arg.StartsWith("/usecallback",StringComparison.InvariantCultureIgnoreCase))
                 {
-                    enableOnBranchCallback = true;
+                    Options.Value.EnableOnBranchCallback = true;
                 }
                 else if(arg.StartsWith("/setversion:", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    newVersion = Int32.Parse(arg.Substring(12));
+                    Options.Value.NewVersion = Int32.Parse(arg.Substring(12));
                 }
                 else if(arg.StartsWith("/print", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    printInstrumented = true;
+                    Options.Value.PrintInstrumentedTypes = true;
                 }
 			}
 
@@ -108,17 +109,11 @@ Examples:
 
 			try
 			{
-                if (Environment.GetEnvironmentVariable("SHARPFUZZ_ENABLE_ON_BRANCH_CALLBACK") is object)
-                {
-                    enableOnBranchCallback = true;
-                }
-
 				foreach (var file in files)
 				{
-					var types = Fuzzer.Instrument(file, Matcher, enableOnBranchCallback, newVersion);
+					var types = Fuzzer.Instrument(file, Matcher, Options.Value);
 
-					if (printInstrumented ||
-						Environment.GetEnvironmentVariable("SHARPFUZZ_PRINT_INSTRUMENTED_TYPES") is object)
+					if (Options.Value.PrintInstrumentedTypes)
 					{
 						Console.WriteLine(file + ":");
 						Console.WriteLine();
