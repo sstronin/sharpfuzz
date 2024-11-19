@@ -42,6 +42,7 @@ integration with afl-fuzz works, read my blog post
 - [Five years of fuzzing .NET with SharpFuzz](https://mijailovic.net/2023/07/23/sharpfuzz-anniversary/)
 - [Let’s do DHCP: fuzzing](http://writeasync.net/?p=5714)
 - [Fuzzing C# on Windows with SharpFuzz and libfuzzer-dotnet](https://github.com/ranweiler/libfuzzer-dotnet-windows-example/blob/main/README.md)
+- [Automate Bug Finding: Fuzzing C# Code on Windows](https://blog.objektkultur.de/Automate-Bug-Finding-Fuzzing-C-Sharp-Code-on-Windows/)
 
 ## Trophies
 
@@ -51,6 +52,9 @@ them to this list. Please send me an email, make a pull
 request for the README file, or file an issue.
   
 - [AngleSharp: HtmlParser.Parse throws InvalidOperationException](https://github.com/AngleSharp/AngleSharp/issues/735) **fixed**
+- [AngleSharp: HtmlParser.ParseDocument throws IndexOutOfRangeException](https://github.com/AngleSharp/AngleSharp/issues/1174) **fixed**
+- [AngleSharp: HtmlParser.ParseDocument throws InvalidOperationException](https://github.com/AngleSharp/AngleSharp/issues/1176) **fixed**
+- [AngleSharp: HtmlParser.ParseDocument hangs permanently](https://github.com/AngleSharp/AngleSharp/issues/1179) **fixed**
 - [CoreFX: BigInteger.TryParse out-of-bounds access](https://github.com/dotnet/corefx/issues/35176) **fixed**
 - [CoreFX: BinaryFormatter.Deserialize throws many unexpected exceptions](https://github.com/dotnet/corefx/issues/35491) **fixed**
 - [CoreFX: DataContractJsonSerializer.ReadObject throws ArgumentOutOfRangeException](https://github.com/dotnet/corefx/issues/35205)
@@ -77,7 +81,7 @@ request for the README file, or file an issue.
 - [Jint: Engine.Execute can throw many unexpected exceptions](https://github.com/sebastienros/jint/issues/571) **fixed**
 - [Jint: Engine.Execute takes more than two minutes to complete (even with the 2s timeout)](https://github.com/sebastienros/jint/issues/586) **fixed**
 - [Jint: Engine.Execute throws OutOfMemoryException after 45s (even with the 2s timeout)](https://github.com/sebastienros/jint/issues/587) **fixed**
-- [Json.NET: JsonConvert.DeserializeObject can throw several unexpected exceptions](https://github.com/JamesNK/Newtonsoft.Json/issues/1947)
+- [Json.NET: JsonConvert.DeserializeObject can throw several unexpected exceptions](https://github.com/JamesNK/Newtonsoft.Json/issues/1947) **[fixed](https://github.com/JamesNK/Newtonsoft.Json/pull/2922)**
 - [Jurassic: ScriptEngine.Execute terminates the process with StackOverflowException](https://github.com/paulbartrum/jurassic/issues/141)
 - [Jurassic: ScriptEngine.Execute throws some unexpected exceptions](https://github.com/paulbartrum/jurassic/issues/142) **fixed**
 - [Jurassic: ScriptEngine.ExecuteFile hangs permanently instead of throwing JavaScriptException](https://github.com/paulbartrum/jurassic/issues/138) **fixed**
@@ -114,6 +118,7 @@ request for the README file, or file an issue.
 - [SharpZipLib: ZipInputStream.GetNextEntry hangs permanently](https://github.com/icsharpcode/SharpZipLib/issues/300) **fixed**
 - [SixLabors.Fonts: FontDescription.LoadDescription throws ArgumentException](https://github.com/SixLabors/Fonts/issues/96) **fixed**
 - [SixLabors.Fonts: FontDescription.LoadDescription throws NullReferenceException](https://github.com/SixLabors/Fonts/issues/97) **fixed**
+- [SixLabors.ImageSharp: Handle EOF in Jpeg bit reader when data is bad to prevent DOS attack](https://github.com/SixLabors/ImageSharp/pull/2516) **fixed**
 - [SixLabors.ImageSharp: Image.Load terminates the process with AccessViolationException](https://github.com/SixLabors/ImageSharp/issues/798) **fixed**
 - [SixLabors.ImageSharp: Image.Load throws AccessViolationException](https://github.com/SixLabors/ImageSharp/issues/827) **fixed**
 - [SixLabors.ImageSharp: Image.Load throws ArgumentException](https://github.com/SixLabors/ImageSharp/issues/826) **fixed**
