@@ -28,6 +28,11 @@ namespace SharpFuzz.Common
 		/// </summary>
 		public static Action<int, string> OnBranch;
 
+        /// <summary>
+        /// Alternative trace footprints mode
+        /// </summary>
+        public static bool AlterTraceMode;
+
         // default buffers to prevent crashing before test environment could be set
         static Trace()
         {
@@ -40,7 +45,21 @@ namespace SharpFuzz.Common
         {
             if(SharedMem!=null)
             {
-                SharedMem[branchId ^ PrevLocation]++;
+                SharedMem[branchId ^ PrevLocation] += 1;
+                PrevLocation = branchId / 2;
+            }
+            if (OnBranch != null)
+            {
+                OnBranch.Invoke(branchId, branchName);
+            }
+        }
+
+        public static void OnBranchAlter(int branchId, string branchName)
+        {
+            if (SharedMem != null)
+            {
+                SharedMem[(branchId ^ PrevLocation) >> 8] |= 
+                    (byte)(1 << ((branchId ^ PrevLocation) & 0x7));
                 PrevLocation = branchId / 2;
             }
             if (OnBranch != null)

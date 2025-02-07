@@ -14,10 +14,8 @@ namespace SharpFuzz
 	{
 		private readonly MemberRef sharedMem;
 		private readonly MemberRef prevLocation;
-		private readonly MemberRef onBranch;
-		private readonly bool enableOnBranchCallback;
+		private readonly IMethod onBranch;
 
-        private readonly IMethod onBranchCall;
         private readonly CilBody body;
 		private readonly List<Instruction> instructions;
 		private readonly Dictionary<Instruction, Instruction> instrumented;
@@ -25,20 +23,12 @@ namespace SharpFuzz
 		private Method(
 			MemberRef sharedMem,
 			MemberRef prevLocation,
-			MemberRef onBranch,
-			bool enableOnBranchCallback,
+			IMethod onBranch,
 			MethodDef method)
 		{
 			this.sharedMem = sharedMem;
 			this.prevLocation = prevLocation;
 			this.onBranch = onBranch;
-			this.enableOnBranchCallback = enableOnBranchCallback;
-
-			if (enableOnBranchCallback)
-			{
-                onBranchCall = method.Module.Import(typeof(Common.Trace)
-                    .GetMethod(nameof(Common.Trace.OnBranchCall)));
-            }
 
 			body = method.Body;
 			instructions = body.Instructions.ToList();
@@ -61,11 +51,10 @@ namespace SharpFuzz
         public static void Instrument(
 			MemberRef sharedMem,
 			MemberRef prevLocation,
-			MemberRef onBranch,
-			bool enableOnBranchCallback,
+			IMethod onBranch,
 			MethodDef method)
 		{
-			new Method(sharedMem, prevLocation, onBranch, enableOnBranchCallback, method);
+			new Method(sharedMem, prevLocation, onBranch, method);
 		}
 
 		// Find all the locations that we want to instrument. These are:
@@ -141,31 +130,36 @@ namespace SharpFuzz
 		{
 			int id = IdGenerator.Next();
 
-			if (enableOnBranchCallback)
+			if (onBranch != null)
 			{
 				yield return Instruction.Create(OpCodes.Ldc_I4, id);
 				yield return Instruction.Create(OpCodes.Ldstr, methodName);
-                yield return Instruction.Create(OpCodes.Call, onBranchCall);
+                yield return Instruction.Create(OpCodes.Call, onBranch);
             }
             else
             {
                 // Generates the instrumentation instructions for a branch
                 // destination. It's equivalent to the following C# code:
-                // var id = IdGenerator.Next();
                 // SharpFuzz.Common.Trace.SharedMem[id ^ SharpFuzz.Common.Trace.PrevLocation]++;
                 // SharpFuzz.Common.Trace.PrevLocation = id >> 1;
 
                 yield return Instruction.Create(OpCodes.Ldsfld, sharedMem);
-                yield return Instruction.Create(OpCodes.Ldsfld, prevLocation);
+                
+				yield return Instruction.Create(OpCodes.Ldsfld, prevLocation);
                 yield return Instruction.Create(OpCodes.Ldc_I4, id);
                 yield return Instruction.Create(OpCodes.Xor);
-                yield return Instruction.Create(OpCodes.Add);
-                yield return Instruction.Create(OpCodes.Dup);
-                yield return Instruction.Create(OpCodes.Ldind_U1);
+                
+				yield return Instruction.Create(OpCodes.Add);
+                
+				yield return Instruction.Create(OpCodes.Dup);
+                
+				yield return Instruction.Create(OpCodes.Ldind_U1);
                 yield return Instruction.Create(OpCodes.Ldc_I4_1);
                 yield return Instruction.Create(OpCodes.Add);
+
                 yield return Instruction.Create(OpCodes.Conv_U1);
                 yield return Instruction.Create(OpCodes.Stind_I1);
+
                 yield return Instruction.Create(OpCodes.Ldc_I4, id >> 1);
                 yield return Instruction.Create(OpCodes.Stsfld, prevLocation);
             }

@@ -75,11 +75,16 @@ namespace SharpFuzz
                         throw new InstrumentationException("The specified assembly is already instrumented.");
                     }
 
+                    if(options.AlterTraceCalc)
+                    {
+                        IdGenerator.MaxBits = 10;
+                    }
+
                     if (Path.GetFileNameWithoutExtension(source) == "System.Private.CoreLib")
                     {
                         var traceType = GenerateTraceType(src);
                         src.Types.Add(traceType);
-                        types = Instrument(src, dst, matcher, options.EnableOnBranchCallback, traceType);
+                        types = Instrument(src, dst, matcher, options, traceType);
                     }
                     else
                     {
@@ -91,7 +96,7 @@ namespace SharpFuzz
                         using (var commonMod = ModuleDefMD.Load(common.Location))
                         {
                             var traceType = commonMod.Types.Single(t => t.FullName == typeof(Common.Trace).FullName);
-                            types = Instrument(src, dst, matcher, options.EnableOnBranchCallback, traceType);
+                            types = Instrument(src, dst, matcher, options, traceType);
                         }
                     }
                 }
@@ -111,16 +116,21 @@ namespace SharpFuzz
             ModuleDefMD src,
             Stream dst,
             Func<string, bool> matcher,
-            bool enableOnBranchCallback,
+            Options options,
             TypeDef traceType)
         {
             var sharedMemDef = traceType.Fields.Single(f => f.Name == nameof(Common.Trace.SharedMem));
             var prevLocationDef = traceType.Fields.Single(f => f.Name == nameof(Common.Trace.PrevLocation));
-            var onBranchDef = traceType.Fields.Single(f => f.Name == nameof(Common.Trace.OnBranch));
+
+            var onBranchDef = 
+                options.AlterTraceCalc ?
+                    traceType.Methods.Single(f => f.Name == nameof(Common.Trace.OnBranchAlter)) :
+                options.EnableOnBranchCallback ?
+                    traceType.Methods.Single(f => f.Name == nameof(Common.Trace.OnBranchCall)) :
+                    null;
 
             var sharedMemRef = src.Import(sharedMemDef);
             var prevLocationRef = src.Import(prevLocationDef);
-            var onBranchRef = src.Import(onBranchDef);
 
             var types = new SortedSet<string>();
 
@@ -136,7 +146,7 @@ namespace SharpFuzz
 							(method.CodeType&MethodImplAttributes.CodeTypeMask)==MethodImplAttributes.IL 
 							&& matcher(method.FullName))
 						{
-							Method.Instrument(sharedMemRef, prevLocationRef, onBranchRef, enableOnBranchCallback, method);
+							Method.Instrument(sharedMemRef, prevLocationRef, onBranchDef, method);
 
                             if (!instrumented)
                             {

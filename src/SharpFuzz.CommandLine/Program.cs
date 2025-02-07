@@ -90,7 +90,11 @@ Examples:
                 {
                     Options.Value.EnableOnBranchCallback = true;
                 }
-                else if(arg.StartsWith("/setversion:", StringComparison.InvariantCultureIgnoreCase))
+                else if (arg.StartsWith("/altertrace", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Options.Value.AlterTraceCalc = true;
+                }
+                else if (arg.StartsWith("/setversion:", StringComparison.InvariantCultureIgnoreCase))
                 {
                     Options.Value.NewVersion = Int32.Parse(arg.Substring(12));
                 }

@@ -15,6 +15,7 @@ namespace SharpFuzz
         private Options()
         {
             EnableOnBranchCallback = GetValue("SHARPFUZZ_ENABLE_ON_BRANCH_CALLBACK");
+            AlterTraceCalc = GetValue("SHARPFUZZ_ALTER_TRACE_MODE");
             PrintInstrumentedTypes = GetValue("SHARPFUZZ_PRINT_INSTRUMENTED_TYPES");
             InstrumentMixedModeAssemblies = GetValue("SHARPFUZZ_INSTRUMENT_MIXED_MODE_ASSEMBLIES");
         }
@@ -28,6 +29,11 @@ namespace SharpFuzz
         /// };
         /// </summary>
         public bool EnableOnBranchCallback { get; set; }
+
+        /// <summary>
+        /// Use alternative mode for footprints in coverage map
+        /// </summary>
+        public bool AlterTraceCalc { get; set; }
 
         /// <summary>
         /// Print the list of all instrumented types to standard console output.
