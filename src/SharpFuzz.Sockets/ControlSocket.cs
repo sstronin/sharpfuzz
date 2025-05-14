@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -17,9 +18,13 @@ namespace SharpFuzz.Sockets
             public void Connect(string host, int port)
             {
                 Logger.Write($"Fuzzer client connecting to {host}:{port}");
-                IPHostEntry ipHostInfo = Dns.GetHostEntry(host);
+
+                var addreses = IPAddress.TryParse(host, out var address)?
+                    new IPAddress[] { address } : Dns.GetHostEntry(host).AddressList;
+
                 _socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-                _socket.Connect(ipHostInfo.AddressList, port);
+                _socket.Connect(addreses, port);
+                
                 Logger.Write($"Fuzzer client connected");
             }
 
@@ -106,7 +111,7 @@ namespace SharpFuzz.Sockets
                     Logger.Write($"Fuzzer server received request {command}");
 
                     var res = statusCallback(out var coverage, out var locations);
-                    Logger.Write($"Fuzzer server processing test status {res}");
+                    Logger.Write($"Fuzzer server processing test status {res} {locations?.Length}");
 
                     var locationsBuff = Encoding.UTF8.GetBytes(locations);
 
@@ -117,6 +122,7 @@ namespace SharpFuzz.Sockets
                         ws.Write(coverage, 0, Fuzzer.MapSize);
                         ws.Write(locationsBuff.Length);
                         ws.Write(locationsBuff);
+                        ws.Flush();
                     }
 
                     Logger.Write($"Fuzzer server sent test results");

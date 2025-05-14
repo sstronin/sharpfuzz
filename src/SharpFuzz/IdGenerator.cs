@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace SharpFuzz
 {
@@ -7,11 +8,11 @@ namespace SharpFuzz
 	{
 		private const int Retries = 10;
 
-		private static readonly Random random = new Random(0x130f4c29);
+		private static readonly Random random = new Random(DateTime.Now.Millisecond);
 		private static readonly byte[] data = new byte[4];
 		private static readonly HashSet<int> ids = new HashSet<int>();
 
-		public static byte MaxBits = 8;
+		public static byte MaxBits = 16;
 
 		// Generates a pseudorandom ID for instrumenting
 		// locations in IL code. It is deterministic, which means

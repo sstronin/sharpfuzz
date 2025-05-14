@@ -77,9 +77,9 @@ namespace SharpFuzz
 
                     if(options.AlterTraceCalc)
                     {
-                        IdGenerator.MaxBits = 10;
+                        IdGenerator.MaxBits = 20;
                     }
-
+/*
                     if (Path.GetFileNameWithoutExtension(source) == "System.Private.CoreLib")
                     {
                         var traceType = GenerateTraceType(src);
@@ -87,16 +87,20 @@ namespace SharpFuzz
                         types = Instrument(src, dst, matcher, options, traceType);
                     }
                     else
-                    {
+*/                    {
                         if (options.NewVersion > 0)
                         {
                             src.Assembly.Version = new Version(options.NewVersion, 0, 0, 0);
                         }
 
-                        using (var commonMod = ModuleDefMD.Load(common.Location))
+                        // using (var commonMod = ModuleDefMD.Load(common.Location))
                         {
-                            var traceType = commonMod.Types.Single(t => t.FullName == typeof(Common.Trace).FullName);
-                            types = Instrument(src, dst, matcher, options, traceType);
+                            //                            var traceType = commonMod.Types.Single(t => t.FullName == typeof(Common.Trace).FullName);
+
+                            var assemblyRef = new AssemblyRefUser(common.GetName());
+                            var traceRef = new TypeRefUser(src, "SharpFuzz.Common", "Trace", assemblyRef);
+
+                            types = Instrument(src, dst, matcher, options, traceRef);
                         }
                     }
                 }
@@ -117,21 +121,32 @@ namespace SharpFuzz
             Stream dst,
             Func<string, bool> matcher,
             Options options,
-            TypeDef traceType)
+            TypeRef traceType)
         {
-            var sharedMemDef = traceType.Fields.Single(f => f.Name == nameof(Common.Trace.SharedMem));
-            var prevLocationDef = traceType.Fields.Single(f => f.Name == nameof(Common.Trace.PrevLocation));
+            var sharedMemRef = new MemberRefUser(
+                src, nameof(Common.Trace.SharedMem), new FieldSig(), traceType);
 
-            var onBranchDef = 
+            var prevLocationRef = new MemberRefUser(
+                src, nameof(Common.Trace.PrevLocation), new FieldSig(), traceType);
+
+
+            var onBranchRef = 
                 options.AlterTraceCalc ?
-                    traceType.Methods.Single(f => f.Name == nameof(Common.Trace.OnBranchAlter)) :
+                    new MemberRefUser(src, nameof(Common.Trace.OnBranchAlter), 
+                        MethodSig.CreateStatic(src.CorLibTypes.Void, src.CorLibTypes.Int32, src.CorLibTypes.String), traceType)
+                    :
                 options.EnableOnBranchCallback ?
-                    traceType.Methods.Single(f => f.Name == nameof(Common.Trace.OnBranchCall)) :
+                    new MemberRefUser(src, nameof(Common.Trace.OnBranchCall),
+                        MethodSig.CreateStatic(src.CorLibTypes.Void, src.CorLibTypes.Int32, src.CorLibTypes.String), traceType)
+                    :
                     null;
 
-            var sharedMemRef = src.Import(sharedMemDef);
-            var prevLocationRef = src.Import(prevLocationDef);
-
+/*
+            importer.Import(traceType);
+            var sharedMemRef = importer.Import(sharedMemDef).ResolveFieldDefThrow();
+            var prevLocationRef = importer.Import(prevLocationDef).ResolveFieldDefThrow();
+            var onBranchCall = onBranchDef != null ? importer.Import(onBranchDef): null;
+*/
             var types = new SortedSet<string>();
 
             foreach (var type in src.GetTypes())
@@ -146,7 +161,7 @@ namespace SharpFuzz
 							(method.CodeType&MethodImplAttributes.CodeTypeMask)==MethodImplAttributes.IL 
 							&& matcher(method.FullName))
 						{
-							Method.Instrument(sharedMemRef, prevLocationRef, onBranchDef, method);
+							Method.Instrument(sharedMemRef, prevLocationRef, onBranchRef, method);
 
                             if (!instrumented)
                             {

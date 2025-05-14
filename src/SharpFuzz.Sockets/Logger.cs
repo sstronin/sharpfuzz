@@ -30,7 +30,8 @@ namespace SharpFuzz.Sockets
 
         public static void Write(string message)
         {
-            _ts.TraceInformation(message);
+            _ts.TraceInformation(
+                $"{DateTime.Now:HH:MM:ss.fff} {Process.GetCurrentProcess().Id} {message}");
         }
     }
 }

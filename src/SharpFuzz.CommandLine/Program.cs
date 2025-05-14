@@ -48,7 +48,7 @@ Examples:
             {
 				if (!File.Exists(path))
 				{
-					Console.Error.WriteLine("Specified file does not exist.");
+					Console.Error.WriteLine($"File '{path}' does not exist.");
 					return 1;
 				}
 
@@ -145,7 +145,7 @@ Examples:
 			{
 				var trimmed = type.Substring(type.IndexOf(' ') + 1);
 
-				if (exclude.Any(prefix => trimmed.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
+				if (exclude.Any(prefix => trimmed.Contains(prefix, StringComparison.InvariantCultureIgnoreCase)))
 				{
 					Console.Error.WriteLine($"Excluded: {trimmed}");
 					return false;

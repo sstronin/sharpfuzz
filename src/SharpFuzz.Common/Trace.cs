@@ -13,7 +13,7 @@ namespace SharpFuzz.Common
 		/// Instrumentation bitmap. Contains XORed pairs of data: identifiers of the
 		/// currently executing branch and the one that executed immediately before.
 		/// </summary>
-		public static byte* SharedMem;
+		public volatile static byte* SharedMem;
 
 		/// <summary>
 		/// Identifier of the last executed branch.
@@ -26,7 +26,7 @@ namespace SharpFuzz.Common
 		/// disabled by default due to performance reasons, and will only be
 		/// called if the user chose to use it when instrumenting the assembly.
 		/// </summary>
-		public static Action<int, string> OnBranch;
+		public volatile static Action<int, string> OnBranch;
 
         /// <summary>
         /// Alternative trace footprints mode
@@ -58,7 +58,7 @@ namespace SharpFuzz.Common
         {
             if (SharedMem != null)
             {
-                SharedMem[(branchId ^ PrevLocation) >> 8] |= 
+                SharedMem[(branchId ^ PrevLocation) >> 4] |= 
                     (byte)(1 << ((branchId ^ PrevLocation) & 0x7));
                 PrevLocation = branchId / 2;
             }
