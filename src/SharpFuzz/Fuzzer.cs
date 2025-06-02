@@ -79,7 +79,7 @@ namespace SharpFuzz
                     {
                         IdGenerator.MaxBits = 20;
                     }
-/*
+
                     if (Path.GetFileNameWithoutExtension(source) == "System.Private.CoreLib")
                     {
                         var traceType = GenerateTraceType(src);
@@ -87,7 +87,7 @@ namespace SharpFuzz
                         types = Instrument(src, dst, matcher, options, traceType);
                     }
                     else
-*/                    {
+                    {
                         if (options.NewVersion > 0)
                         {
                             src.Assembly.Version = new Version(options.NewVersion, 0, 0, 0);
@@ -121,7 +121,7 @@ namespace SharpFuzz
             Stream dst,
             Func<string, bool> matcher,
             Options options,
-            TypeRef traceType)
+            ITypeDefOrRef traceType)
         {
             var sharedMemRef = new MemberRefUser(
                 src, nameof(Common.Trace.SharedMem), new FieldSig(), traceType);

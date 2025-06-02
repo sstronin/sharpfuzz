@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -16,7 +17,7 @@ namespace SharpFuzz.Sockets
             _controlPort = controlPort;
         }
 
-        public unsafe void Run(Func<uint> statusCallback)
+        public unsafe void Run(Func<uint> statusCallback, Action completionGuard = null)
         {
             Logger.Write($"Initializing fuzzing monitor");
 
@@ -49,13 +50,14 @@ namespace SharpFuzz.Sockets
                                     getLocations = collectLocations;
                                     locations.Clear();
                                     traceWrapper.ResetPrevLocation();
-                                    traceBuffer.Initialize();
+                                    for(var i=0;i< traceBuffer.Length;++i) traceBuffer[i]=0;
                                     Logger.Write($"State was reset");
                                 }))
                             {
                                 Logger.Write($"Gathering state");
                                 ctrlSocket.ProcessGetStatus((out byte[] c, out string l) =>
                                 {
+                                    completionGuard?.Invoke();
                                     Logger.Write($"Reporting state");
                                     c = new byte[traceBuffer.Length];
                                     traceBuffer.CopyTo(c,0);
